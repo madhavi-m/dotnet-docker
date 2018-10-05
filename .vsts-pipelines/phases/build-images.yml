@@ -1,0 +1,79 @@
+phases:
+  - phase: Build_Linux_amd64
+    condition: or(eq(variables['singlePhase'], ''), eq(variables['singlePhase'], 'build'))
+    dependsOn: GenerateMatrices
+    queue:
+      name: DotNet-Build
+      demands: agent.os -equals linux
+      parallel: 100
+      matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixLinuxAmd64'] ]
+    steps:
+      - template: ../steps/docker-init-linux.yml
+      - script: $(runImageBuilderCmd) build --manifest $(manifest) $(imageBuilderPaths) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --skip-test --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
+        displayName: Build Images
+      - template: ../steps/docker-cleanup-linux.yml
+
+phases:
+  - phase: Build_Linux_arm32v7
+    condition: or(eq(variables['singlePhase'], ''), eq(variables['singlePhase'], 'build'))
+    dependsOn: GenerateMatrices
+    queue:
+      name: DotNetCore-Infra
+      demands:
+        - agent.os -equals linux
+        - DockerArch -equals arm32v7
+      parallel: 100
+      matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixLinuxArm32v7'] ]
+    steps:
+      - template: ../steps/docker-init-linux.yml
+        parameters:
+          setupRemoteDocker: true
+      - script: $(runImageBuilderCmd) build --manifest $(manifest) $(imageBuilderPaths) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --skip-test --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
+        displayName: Build Images
+      - template: ../steps/docker-cleanup-linux.yml
+        parameters:
+          remoteDockerCleanupImage: $(imageBuilder.image)
+
+parameters:
+  phase: null
+  osVersion: null
+  demands: []
+  matrix: {}
+phases:
+  - phase: ${{ parameters.phase }}
+    condition: or(eq(variables['singlePhase'], ''), eq(variables['singlePhase'], 'build'))
+    dependsOn: GenerateMatrices
+    queue:
+      name: DotNetCore-Infra
+      demands: ${{ parameters.demands }}
+      parallel: 100
+      matrix: ${{ parameters.matrix }}
+    variables:
+      osVersion: ${{ parameters.osVersion }}
+    steps:
+      - template: ../steps/docker-init-windows.yml
+      - script: $(runImageBuilderCmd) build --manifest $(manifest) --os-version $(osVersion) --skip-test $(imageBuilderPaths) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
+        displayName: Build Images
+      - template: ../steps/docker-cleanup-windows.yml
+
+phases:
+  - phase: Build_Windows_arm32
+    condition: or(eq(variables['singlePhase'], ''), eq(variables['singlePhase'], 'build'))
+    dependsOn: GenerateMatrices
+    queue:
+      name: DotNetCore-Infra
+      demands:
+        - agent.os -equals linux
+        - DockerArch -equals arm32v7
+        - DockerOS -equals windows
+      parallel: 100
+      matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixWindowsArm32v7'] ]
+    steps:
+      - template: ../steps/docker-init-linux.yml
+        parameters:
+          setupRemoteDocker: true
+      - script: $(runImageBuilderCmd) build --manifest $(manifest) $(imageBuilderPaths) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --skip-test --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
+        displayName: Build Images
+      - template: ../steps/docker-cleanup-linux.yml
+        parameters:
+          remoteDockerCleanupImage: $(imageBuilder.image)

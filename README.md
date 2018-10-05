@@ -121,6 +121,14 @@ See the [complete set of tags](https://github.com/dotnet/dotnet-docker/blob/nigh
 
 See the [complete set of tags](https://github.com/dotnet/dotnet-docker/blob/nightly/TAGS.md).
 
+# Windows arm32 tags
+
+- [`2.1.5-runtime-nanoserver-1809-arm32`, `2.1-runtime-nanoserver-1809-arm32`, `2.1.5-runtime`, `2.1-runtime`, `runtime` (*2.1/runtime/nanoserver-1809/arm32/Dockerfile*)](https://github.com/dotnet/dotnet-docker/blob/nightly/2.1/runtime/nanoserver-1809/arm32/Dockerfile)
+
+**.NET Core 2.2 & 3.0 Preview tags**
+
+See the [complete set of tags](https://github.com/dotnet/dotnet-docker/blob/nightly/TAGS.md).
+
 For more information about these images and their history, please see [the relevant Dockerfile](https://github.com/dotnet/dotnet-docker/search?utf8=%E2%9C%93&q=FROM&type=Code). These images are updated via [pull requests to the `dotnet/dotnet-docker` GitHub repo](https://github.com/dotnet/dotnet-docker/pulls).
 
 ## What is .NET Core?
