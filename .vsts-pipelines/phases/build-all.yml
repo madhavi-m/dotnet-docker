@@ -122,4 +122,4 @@ phases:
   #     demands: VSTS_OS -equals Windows_Server_2019_Data_Center_RS5
   #     matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixNanoserver1809Amd64'] ]
 
-  - template: publish-finalize.yml
+  #- template: publish-finalize.yml
