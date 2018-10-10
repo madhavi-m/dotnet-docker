@@ -6,7 +6,7 @@ phases:
       name: DotNetCore-Infra
       demands:
         - agent.os -equals linux
-        - DockerArch -equals arm32v7
+        - DockerArch -equals arm32
         - DockerOS -equals windows
       parallel: 100
       matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixWindowsArm32v7'] ]
