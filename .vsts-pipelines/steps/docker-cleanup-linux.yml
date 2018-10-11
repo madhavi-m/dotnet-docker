@@ -5,7 +5,7 @@ steps:
   ################################################################################
   # Cleanup for remote Docker usage
   ################################################################################
-  - ${{ if ne(parameters.remoteDockerCleanupImage, 'null') }}:
+  # - ${{ if ne(parameters.remoteDockerCleanupImage, 'null') }}:
     # - script: docker run --rm $(dockerArmRunArgs) --entrypoint docker $remoteDockerCleanupImage system prune -a -f --volumes
     #   displayName: Cleanup Remote Docker
     #   condition: always()
