@@ -9,7 +9,7 @@ phases:
         - DockerArch -equals arm32
         - DockerOS -equals windows
       parallel: 100
-      matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixWindowsArm32'] ]
+      matrix: $[ dependencies.GenerateMatrices.outputs['buildMatrix.buildMatrixNanoserver1809Arm32v7'] ]
     steps:
       - template: ../steps/docker-init-linux.yml
         parameters:
