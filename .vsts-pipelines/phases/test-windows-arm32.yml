@@ -10,7 +10,7 @@ phases:
         - agent.os -equals linux
         - DockerArch -equals arm32v7
       parallel: 100
-      matrix: $[ dependencies.GenerateMatrices.outputs['testMatrix.testMatrixWindowsArm32v7'] ]
+      matrix: $[ dependencies.GenerateMatrices.outputs['testMatrix.testMatrixWindowsArm32'] ]
     variables:
       testRunner.container: testrunner-$(System.JobId)
     steps:
